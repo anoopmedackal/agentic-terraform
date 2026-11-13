@@ -86,7 +86,7 @@ graph TD
     T_CLI -.- AWS_CLI
     
     %% Cloud Interaction
-    T_CLI -->|"7a. Deploys Infra (via anoop_admin policy)"| AWS_API
+    T_CLI -->|"7a. Deploys Infra (via admin policy)"| AWS_API
     AWS_API -->|"7b. Provisions Resources"| S3
     
     %% Theme-Safe Styling (Explicit text color prevents white-on-light in Dark Mode)
