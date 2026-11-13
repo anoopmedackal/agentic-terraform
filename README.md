@@ -38,7 +38,6 @@ To ensure the AI assistant never behaves unpredictably, every task in this repos
 ---
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#e1f5fe', 'edgeLabelBackground':'#ffffff', 'tertiaryColor': '#fff'}}}%%
 graph TD
     %% Define Nodes and Actors
     User["👤 Human Developer"]
@@ -84,18 +83,21 @@ graph TD
     Cline -->|"5. Writes Code"| T_Files
     Cline -->|"6a. Executes Command"| T_CLI
     T_CLI <-->|"6b. Reads/Writes State"| T_State
+    T_CLI -.- AWS_CLI
     
     %% Cloud Interaction
     T_CLI -->|"7a. Deploys Infra (via anoop_admin policy)"| AWS_API
     AWS_API -->|"7b. Provisions Resources"| S3
     
-    %% Styling for clarity
-    classDef actor fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef critical stroke:#f00,stroke-width:3px,stroke-dasharray: 5 5;
-    classDef storage fill:#ffecb3,stroke:#333;
+    %% Theme-Safe Styling (Explicit text color prevents white-on-light in Dark Mode)
+    classDef actor fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#111111;
+    classDef critical stroke:#e53935,stroke-width:3px,stroke-dasharray: 5 5;
+    classDef storage fill:#fff8e1,stroke:#f57f17,stroke-width:2px,color:#111111;
+    classDef external fill:#e3f2fd,stroke:#1976d2,stroke-width:1.5px,color:#111111;
     
     class User,Cline actor;
     class T_State critical,storage;
+    class OR,Registry,AWS_API,S3 external;
 ```
 
 ## Repository Layout
