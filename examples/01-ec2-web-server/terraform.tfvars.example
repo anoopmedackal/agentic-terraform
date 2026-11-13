@@ -1,0 +1,15 @@
+# =====================================================================
+# Example variable values - copy to terraform.tfvars and customize.
+# NOTE: *.tfvars files are gitignored because they may contain sensitive
+# values. Never commit real credentials anywhere in the repo (guardrail #3).
+# =====================================================================
+
+aws_region = "ap-south-2"
+
+# Optional - omit entirely to use AWS_PROFILE env var or the default
+# shared-credential chain:
+# aws_profile = "your-profile-name"
+
+# Optional overrides (defaults shown):
+# instance_type = "t3.micro"
+# ami_ssm_path  = "/aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id"

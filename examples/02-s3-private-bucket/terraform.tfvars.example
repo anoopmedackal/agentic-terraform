@@ -1,0 +1,14 @@
+# =====================================================================
+# Example variable values - copy to terraform.tfvars and customize.
+# NOTE: *.tfvars files are gitignored because they may contain sensitive
+# values. Never commit real credentials anywhere in the repo (guardrail #3).
+# =====================================================================
+
+aws_region = "ap-south-2"
+
+# Optional - omit entirely to use AWS_PROFILE env var or the default
+# shared-credential chain:
+# aws_profile = "your-profile-name"
+
+environment   = "workshop"
+bucket_prefix = "workshop-private"

@@ -1,0 +1,14 @@
+{
+  "$README": "Template for enabling the HashiCorp Terraform MCP Server in your AI coding assistant. Copy this file to .vscode/.mcp.json (or your IDE's equivalent MCP config) in this repository, then restart/trust the workspace. The server runs in a Docker container so Docker must be installed. Never commit credentials into MCP config files.",
+  "mcpServers": {
+    "terraform": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "hashicorp/terraform-mcp-server"
+      ]
+    }
+  }
+}

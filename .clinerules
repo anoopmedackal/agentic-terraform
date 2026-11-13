@@ -1,0 +1,7 @@
+# Terraform AI Agent Guardrails
+
+1. **Schema Verification:** Always query the HashiCorp Terraform MCP Server before writing resource blocks to avoid deprecated arguments.
+2. **Cost Protection:** Default to AWS Free Tier eligible resources (`t3.micro`, `PAY_PER_REQUEST`, standard S3) unless explicitly instructed otherwise.
+3. **Security First:** Never hardcode AWS credentials, profile names, or account IDs. Always use variables or environment variables.
+4. **S3 & Network Safety:** All S3 buckets must enforce `aws_s3_bucket_public_access_block` with all four settings set to `true`.
+5. **Code Structure:** Separate code cleanly into `main.tf`, `variables.tf`, and `outputs.tf`, and run `terraform fmt` and `terraform validate` before finishing any task.
