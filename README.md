@@ -37,67 +37,66 @@ To ensure the AI assistant never behaves unpredictably, every task in this repos
 
 ---
 
+```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#e1f5fe', 'edgeLabelBackground':'#ffffff', 'tertiaryColor': '#fff'}}}%%
 graph TD
     %% Define Nodes and Actors
-    User[cite: "👤 Human Developer"]
+    User["👤 Human Developer"]
     
-    subgraph Local_Workstation [cite: "💻 Local Machine (Windows w/ WSL2)"]
-        subgraph IDE_Context [cite: "📝 VS Code"]
-            Cline[cite: "🤖 Cline AI Extension"]
+    subgraph Local_Workstation ["💻 Local Machine (Windows w/ WSL2)"]
+        subgraph IDE_Context ["📝 VS Code"]
+            Cline["🤖 Cline AI Extension"]
         end
         
-        subgraph Docker_Sandbox [cite: "🐳 Docker Container"]
-            MCP[cite: "🗄️ HashiCorp Terraform MCP Server"]
+        subgraph Docker_Sandbox ["🐳 Docker Container"]
+            MCP["🗄️ HashiCorp Terraform MCP Server"]
         end
         
-        subgraph Terminal_Context [cite: "🐚 WSL2 Ubuntu Terminal"]
-            T_CLI[cite: "🛠️ Terraform CLI"]
-            AWS_CLI[cite: "☁️ AWS CLI"]
-            T_Files[cite: "📄 main.tf \n (Generated Code)"]
-            T_State[cite: "🔐 terraform.tfstate \n (Plaintext secrets!)"]
+        subgraph Terminal_Context ["🐚 WSL2 Ubuntu Terminal"]
+            T_CLI["🛠️ Terraform CLI"]
+            AWS_CLI["☁️ AWS CLI"]
+            T_Files["📄 main.tf \n (Generated Code)"]
+            T_State["🔐 terraform.tfstate \n (Plaintext secrets!)"]
         end
     end
 
-    subgraph External_APIs [cite: "🌐 External APIs (Over HTTPS)"]
-        OR[cite: "🧠 OpenRouter / DeepSeek API"]
-        Registry[cite: "📚 Public Terraform Registry"]
+    subgraph External_APIs ["🌐 External APIs (Over HTTPS)"]
+        OR["🧠 OpenRouter / DeepSeek API"]
+        Registry["📚 Public Terraform Registry"]
     end
     
-    subgraph Cloud [cite: "☁️ AWS Cloud API"]
-        AWS_API[cite: "Management API"]
-        S3[cite: "📦 Target Services (S3, etc.)"]
+    subgraph Cloud ["☁️ AWS Cloud API"]
+        AWS_API["Management API"]
+        S3["📦 Target Services (S3, etc.)"]
     end
 
     %% Define Data Flows and Trust Boundaries
-    User -->|cite: "1. Natural Language Prompt"| Cline
-    User -.->|cite: "4. Human Review & Blind Approval (CRITICAL RISK)"| Cline
+    User -->|"1. Natural Language Prompt"| Cline
+    User -.->|"4. Human Review & Blind Approval (CRITICAL RISK)"| Cline
     
-    Cline <-->|cite: "2. Sends Context / Receives Reasoning"| OR
+    Cline <-->|"2. Sends Context / Receives Reasoning"| OR
     
     %% The Grounding Loop
-    Cline <-->|cite: "3a. Queries Schema (stdio)"| MCP
-    MCP <-->|cite: "3b. Fetches Live Syntax"| Registry
+    Cline <-->|"3a. Queries Schema (stdio)"| MCP
+    MCP <-->|"3b. Fetches Live Syntax"| Registry
     
     %% The Execution Loop
-    Cline -->|cite: "5. Writes Code"| T_Files
-    Cline -->|cite: "6a. Executes Command"| T_CLI
-    T_CLI <-->|cite: "6b. Reads/Writes State"| T_State
+    Cline -->|"5. Writes Code"| T_Files
+    Cline -->|"6a. Executes Command"| T_CLI
+    T_CLI <-->|"6b. Reads/Writes State"| T_State
     
     %% Cloud Interaction
-    T_CLI -->|cite: "7a. Deploys Infra (via anoop_admin policy)"| AWS_API
-    AWS_API -->|cite: "7b. Provisions Resources"| S3
+    T_CLI -->|"7a. Deploys Infra (via anoop_admin policy)"| AWS_API
+    AWS_API -->|"7b. Provisions Resources"| S3
     
     %% Styling for clarity
     classDef actor fill:#f9f,stroke:#333,stroke-width:2px;
     classDef critical stroke:#f00,stroke-width:3px,stroke-dasharray: 5 5;
     classDef storage fill:#ffecb3,stroke:#333;
     
-    class User actor;
-    class Cline actor;
+    class User,Cline actor;
     class T_State critical,storage;
-    class OR,Registry,AWS_API external;
----
+```
 
 ## Repository Layout
 
