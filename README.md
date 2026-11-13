@@ -3,10 +3,37 @@
 **AI-assisted Infrastructure as Code portfolio repository** — a curated, multi-folder collection of
 Terraform configurations for AWS built with a human-plus-AI workflow.
 
-Every configuration in this repository is authored with the help of an AI coding assistant (e.g.
-Cline). The assistant is bound by the guardrails in [`.clinerules`](./.clinerules) and uses the
-HashiCorp Terraform MCP Server to verify resource schemas against the live registry **before**
-writing any resource block — never relying on memory and never emitting deprecated syntax.
+When I first started exploring Infrastructure as Code (IaC) with Terraform alongside AI coding assistants, I ran into a wall of common beginner anxieties: *How do I stop an AI from leaking my AWS credentials? How do I keep it from hallucinating deprecated Terraform syntax? And how can I build cloud resources without accidentally blowing past the AWS Free Tier budget?*
+
+This repository is the result of solving those exact problems. It is a modular, guardrailed, human-in-the-loop framework designed to let AI coding agents build production-grade cloud infrastructure safely, cheaply, and accurately.
+
+## The Journey & Architectural Evolution
+
+Instead of treating AI tools like a simple copy-paste chatbot, I wanted to build a disciplined agentic workflow that mimics how professional cloud engineers operate:
+
+1. **Solving the Credential Leak Risk**
+   Early on, I realized storing long-lived plaintext keys or letting an AI scan local configuration files posed massive security risks. I structured the environment to rely purely on environment variables or external shared credential chains, ensuring zero secrets ever touch the codebase or enter an LLM context window.
+
+2. **Stopping AI Hallucinations with MCP**
+   Standard LLMs often guess Terraform arguments based on outdated training data (like using deprecated inline `acl` or `versioning` blocks on S3 buckets). To fix this, I integrated the official **HashiCorp Terraform MCP Server** running locally in Docker. This allows the AI agent to query the live Terraform registry for real-time schemas *before* writing a single line of code.
+
+3. **Balancing Cost and Intelligence**
+   Running high-end proprietary models can become expensive quickly. By routing lightweight, high-performance open-source models (like DeepSeek via OpenRouter) through an IDE agent (Cline in VS Code), I achieved top-tier coding intelligence at a fraction of a cent per prompt.
+
+---
+
+## Core Guardrails (`.clinerules`)
+
+To ensure the AI assistant never behaves unpredictably, every task in this repository is bound by strict guardrails defined in `.clinerules`:
+
+* **Live Schema Verification**
+  The agent must query the Terraform MCP server before writing any resource block.
+* **Cost Protection**
+  Defaults are strictly tied to AWS Free Tier parameters (e.g., `t3.micro` instances, `PAY_PER_REQUEST` billing) unless explicitly overridden.
+* **Security-First Design**
+  No hardcoded profile names, account IDs, or credentials allowed in `.tf` files.
+* **Modular Cleanliness**
+  Infrastructure is split cleanly into `main.tf`, `variables.tf`, and `outputs.tf`, with mandatory post-generation validation (`terraform fmt` and `terraform validate`).
 
 ---
 
@@ -35,25 +62,6 @@ terraform-ai-cloud-agent/
         ├── outputs.tf
         └── terraform.tfvars.example
 ```
-
----
-
-## What This Portfolio Demonstrates
-
-1. **A reusable, dependency-free module** — `modules/s3-bucket/` builds a completely **private**
-   S3 bucket with a unique name via `random_id`. It is split into `main.tf`, `variables.tf`, and
-   `outputs.tf` (guardrail #5), contains **no provider block** (modules inherit the calling root's
-   provider) and **no hardcoded credentials, profiles, or account IDs** (guardrail #3).
-2. **Standalone, runnable examples** — each folder under `examples/` is its own root configuration
-   with its own `main.tf`, `variables.tf`, and `outputs.tf`. Run them individually, destroy them
-   individually, and point any future example at the module.
-3. **AI-guardrailed authoring** — `.clinerules` codifies the five rules the AI agent must follow on
-   every task: schema verification, cost protection, security first, S3 safety, and code structure.
-4. **A repeatable human+AI loop** — the MCP configuration in `mcp-config.example.json` wires the
-   HashiCorp Terraform MCP Server into your IDE so the assistant always has live, schema-accurate
-   documentation while writing Terraform.
-
----
 
 ## The AI-Assisted IaC Workflow
 
